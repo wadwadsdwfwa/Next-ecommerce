@@ -3,6 +3,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import User from "../../../models/User"
 import db from "../../../utils/db"
+import GithubProvider from "next-auth/providers/github"
 
 export default NextAuth({
   session: {
@@ -11,7 +12,7 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user?._id) token._id = user._id
-      if (user?.isAdmin) token.isAdmin = user.isAdmin
+      if (user?._isAdmin) token.isAdmin = user.isAdmin
       return token
     },
     async session({ session, token }) {
@@ -40,6 +41,11 @@ export default NextAuth({
         }
         throw new Error("Invalid email or password")
       },
+    }),
+
+    GithubProvider({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
     }),
   ],
 })
