@@ -36,6 +36,17 @@ export default function LoginScreen() {
       toast.error(getError(err))
     }
   }
+
+  const githubLoginHandler = async () => {
+    try {
+      const result = await signIn("github", {
+        redirect: false,
+      })
+      console.log("Github login: " + result)
+    } catch (err) {
+      toast.error(getError(err))
+    }
+  }
   return (
     <Layout title="Login">
       <form
@@ -85,6 +96,18 @@ export default function LoginScreen() {
         <div className="mb-4">
           Don&apos;t have an account? &nbsp;
           <Link href={`/register?redirect=${redirect || "/"}`}>Register</Link>
+        </div>
+
+        <div className="p-5 bg-gray-500 rounded-lg">
+          <div className="mb-4">
+            <button
+              className="primary-button w-full"
+              type="button"
+              onClick={githubLoginHandler}
+            >
+              Github Login
+            </button>
+          </div>
         </div>
       </form>
     </Layout>
